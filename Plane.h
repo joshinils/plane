@@ -10,7 +10,7 @@ private:
 	double _originY = 0;
 	double _translX = 0;
 	double _translY = 0;
-	double _scale = 1;
+	double _scale = 10;
 
 	double _movementSpeed = 20;
 
@@ -22,9 +22,9 @@ public:
 	{
 		std::cout << __FUNCTION__ << std::endl;
 		_originX = olc::PixelGameEngine::ScreenWidth()/2;
-//		_translX = _originX;
+		_translX = _originX;
 		_originY = olc::PixelGameEngine::ScreenHeight()/2;
-//		_translY = _originY;
+		_translY = _originY;
 		return true;
 	}
 
