@@ -1,4 +1,5 @@
 #ifndef PLANE_H
+#define PLANE_H
 
 #include "olcPixelGameEngine/olcPixelGameEngine.h"
 
@@ -10,7 +11,7 @@ private:
 	double _originY = 0;
 	double _translX = 0;
 	double _translY = 0;
-	double _scale = 100;
+	double _scale = 10;
 
 	double _movementSpeed = 100;
 
@@ -32,6 +33,7 @@ public:
 	{
 		std::cout.flush();
 		std::cout << __FUNCTION__ << std::endl;
+
 
 		if(GetKey(olc::W).bHeld)
 		{
@@ -66,7 +68,7 @@ public:
 		}
 
 
-		std::cout << "_originX: " << _originX << "	_originY: " << _originY << "	 _translX: " << _translX << "	_translY: " << _translY << "	 minX: " << minX() << "	 maxX: " << maxX() << "	 minY: " << minY() << "	 maxY: " << maxY() << std::endl;
+		std::cout << "_originX: " << _originX << "	_originY: " << _originY << "	 _translX: " << _translX << "	_translY: " << _translY << "	 minX: " << minX() << "	 maxX: " << maxX() << "	 minY: " << minY() << "	 maxY: " << maxY() << "		scale: " << _scale << std::endl;
 		return true;
 	}
 
