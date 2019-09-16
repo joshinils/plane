@@ -58,15 +58,15 @@ bool Plane::OnUserUpdate(float fElapsedTime)
 	handleUserInput(fElapsedTime);
 
 	Clear(olc::BLACK);
-	olc::PixelGameEngine::DrawRect(_screenBoundaryXmin, _screenBoundaryYmin, _screenBoundaryXmax - _screenBoundaryXmin, _screenBoundaryYmax - _screenBoundaryYmin, olc::GREY);
+	//olc::PixelGameEngine::DrawRect(_screenBoundaryXmin, _screenBoundaryYmin, _screenBoundaryXmax - _screenBoundaryXmin, _screenBoundaryYmax - _screenBoundaryYmin, olc::GREY);
 
-	double mx = GetMouseX();
-	double my = GetMouseY();
-	mx = stocx((int32_t)mx);
-	my = stocy((int32_t)my);
-	double middleX = stocx((_screenBoundaryXmax + _screenBoundaryXmin) / 2);
-	double middleY = stocy((_screenBoundaryYmax + _screenBoundaryYmin) / 2);
-	FillTriangle(middleX - 10, middleY + 10, middleX + 10, middleY - 10, mx, my, olc::YELLOW);
+	//double mx = GetMouseX();
+	//double my = GetMouseY();
+	//mx = stocx((int32_t)mx);
+	//my = stocy((int32_t)my);
+	//double middleX = stocx((_screenBoundaryXmax + _screenBoundaryXmin) / 2);
+	//double middleY = stocy((_screenBoundaryYmax + _screenBoundaryYmin) / 2);
+	//FillTriangle(middleX - 10, middleY + 10, middleX + 10, middleY - 10, mx, my, olc::YELLOW);
 
 	return true;
 }
@@ -448,11 +448,7 @@ inline void Plane::DrawLineScreen(int x1, int y1, int x2, int y2, olc::Pixel p)
 // Draws a line from (x1,y1) to (x2,y2)
 void Plane::DrawLine(double X1, double Y1, double X2, double Y2, olc::Pixel p, uint32_t pattern)
 {
-	int x1 = ctosx(X1);
-	int y1 = ctosy(Y1);
-	int x2 = ctosx(X2);
-	int y2 = ctosy(Y2);
-	DrawLineScreen(ctosx(X1), ctosx(Y1), ctosx(X2), ctosx(Y2), pattern, pattern);
+	DrawLineScreen(ctosx(X1), ctosy(Y1), ctosx(X2), ctosy(Y2), p, pattern);
 }
 
 // Draws a circle located at (x,y) with radius
@@ -486,19 +482,19 @@ void Plane::FillCircle(double x, double y, double radius, olc::Pixel p)
 		int ex = (int)clampX(x + x0);
 		int ny = (int)clampY(y - y0);
 		for (int i = (int32_t)clampX(x - x0); i <= ex; i++)
-			olc::PixelGameEngine::Draw(i, ny, olc::CYAN);
+			olc::PixelGameEngine::Draw(i, ny, p);
 		ex = (int)clampX(x + y0);
 		ny = (int)clampY(y - x0);
 		for (int i = (int32_t)clampX(x - y0); i <= ex; i++)
-			olc::PixelGameEngine::Draw(i, ny, olc::YELLOW);
+			olc::PixelGameEngine::Draw(i, ny, p);
 		ex = (int)clampX(x + x0);
 		ny = (int)clampY(y + y0);
 		for (int i = (int32_t)clampX(x - x0); i <= ex; i++)
-			olc::PixelGameEngine::Draw(i, ny, olc::BLUE);
+			olc::PixelGameEngine::Draw(i, ny, p);
 		ex = (int)clampX(x + y0);
 		ny = (int)clampY(y + x0);
 		for (int i = (int32_t)clampX(x - y0); i <= ex; i++)
-			olc::PixelGameEngine::Draw(i, ny, olc::GREEN);
+			olc::PixelGameEngine::Draw(i, ny, p);
 
 		if (d < 0) d += 4 * x0++ + 6;
 		else d += 4 * (x0++ - y0--) + 10;
@@ -520,6 +516,7 @@ void Plane::FillRect(double x, double y, double w, double h, olc::Pixel p)
 // Draws a triangle between points (x1,y1), (x2,y2) and (x3,y3)
 void Plane::DrawTriangle(double x1, double y1, double x2, double y2, double x3, double y3, olc::Pixel p)
 {
+//	olc::PixelGameEngine::DrawTriangle(ctosx(x1), ctosy(y1), ctosx(x2), ctosy(y2), ctosx(x3), ctosy(y3), olc::RED);
 	DrawLine(x1, y1, x2, y2, p);
 	DrawLine(x2, y2, x3, y3, p);
 	DrawLine(x3, y3, x1, y1, p);
@@ -601,9 +598,9 @@ void Plane::FillTriangleHomebrew(double x1, double y1, double x2, double y2, dou
 // Flat fills a triangle between points (x1,y1), (x2,y2) and (x3,y3)
 void Plane::FillTriangle(double x1, double y1, double x2, double y2, double x3, double y3, olc::Pixel p)
 {
-	olc::PixelGameEngine::FillTriangle(ctosx(x1), ctosy(y1), ctosx(x2), ctosy(y2), ctosx(x3), ctosy(y3), olc::RED);
-	FillTriangleHomebrew(x1, y1, x2, y2, x3, y3, p);
-	olc::PixelGameEngine::FillTriangle(ctosx(x1), ctosy(y1), ctosx(x2), ctosy(y2), ctosx(x3), ctosy(y3), olc::RED);
+	//olc::PixelGameEngine::FillTriangle(ctosx(x1), ctosy(y1), ctosx(x2), ctosy(y2), ctosx(x3), ctosy(y3), olc::RED);
+	//FillTriangleHomebrew(x1, y1, x2, y2, x3, y3, p);
+	//olc::PixelGameEngine::FillTriangle(ctosx(x1), ctosy(y1), ctosx(x2), ctosy(y2), ctosx(x3), ctosy(y3), olc::RED);
 	FillTriangleHomebrew(x1, y1, x2, y2, x3, y3, p);
 }
 
