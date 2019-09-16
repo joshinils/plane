@@ -2,6 +2,7 @@
 #define PLANE_H
 
 #include "olcPixelGameEngine/olcPixelGameEngine.h"
+#include "Vec2d.h"
 
 class Plane
 	: public olc::PixelGameEngine
@@ -28,23 +29,22 @@ public:
 	virtual bool OnUserUpdate(float fElapsedTime);
 
 	//coordinate to screen x
-	int32_t ctosx(double x);
+	inline int32_t ctosx(double x);
 
 	// screen to coordinate x
-	double stocx(int32_t x);
+	inline double stocx(int32_t x);
 
 	//coordinate to screen y
-	int32_t ctosy(double y);
+	inline int32_t ctosy(double y);
 
 	// screen to coordinate y
-	double stocy(int32_t y);
+	inline double stocy(int32_t y);
 
 	// clamps x to visible pixels
-	double clampX(double x);
+	inline double clampX(double x);
 
 	// clamps y to visible pixels
-	double clampY(double y);
-
+	inline double clampY(double y);
 
 	double minX();
 	double minY();
@@ -59,13 +59,14 @@ public:
 
 	// Draws a line from (x1,y1) to (x2,y2)
 	inline void DrawLine(double x1, double y1, double x2, double y2, olc::Pixel p = olc::WHITE, uint32_t pattern = 0xFFFFFFFF);
+	inline void DrawLineScreen(int x1, int y1, int x2, int y2, olc::Pixel p, uint32_t pattern);
+	inline void DrawLineScreen(int x1, int y1, int x2, int y2, olc::Pixel p = olc::WHITE);
 
 	// Draws a circle located at (x,y) with radius
 	void DrawCircle(double x, double y, double radius, olc::Pixel p = olc::WHITE, uint8_t mask = 0xFF);
 
 	// Fills a circle located at (x,y) with radius
 	void FillCircle(double x, double y, double radius, olc::Pixel p = olc::WHITE);
-	void FillCircleHomebrew(int32_t x, int32_t y, int32_t radius, olc::Pixel p = olc::WHITE);
 
 	// Draws a rectangle at (x,y) to (x+w,y+h)
 	void DrawRect(double x, double y, double w, double h, olc::Pixel p = olc::WHITE);
@@ -78,6 +79,9 @@ public:
 
 	// Flat fills a triangle between points (x1,y1), (x2,y2) and (x3,y3)
 	void FillTriangle(double x1, double y1, double x2, double y2, double x3, double y3, olc::Pixel p = olc::WHITE);
+	void FillTriangleHomebrew(double x1, double y1, double x2, double y2, double x3, double y3, olc::Pixel p = olc::WHITE);
+	void fillBottomFlatTriangle(Vec2d v1, Vec2d v2, Vec2d v3, olc::Pixel const& p);
+	void fillTopFlatTriangle(Vec2d v1, Vec2d v2, Vec2d v3, olc::Pixel const& p);
 
 	// Draws an entire olc::Sprite at location (x,y)
 	void DrawSprite(double x, double y, olc::Sprite* sprite, uint32_t scale = 1);

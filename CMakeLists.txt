@@ -14,6 +14,8 @@ add_executable("${PROJECT_NAME}"
 	"main.cpp"
 	"Plane.cpp"
 	"Plane.h"
+	"Vec2d.cpp"
+	"Vec2d.h"
 	"pge.cpp"
 )
 
