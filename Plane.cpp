@@ -43,13 +43,23 @@ void Plane::handleUserInput(double fElapsedTime)
 	if (GetKey(olc::T).bHeld)
 	{
 		_scale += fElapsedTime * _scale;
-		_movementSpeed += fElapsedTime;
+		_movementSpeed += fElapsedTime*100;
 	}
 
 	if (GetKey(olc::G).bHeld)
 	{
 		_scale -= fElapsedTime * _scale;
-		_movementSpeed -= fElapsedTime;
+		_movementSpeed -= fElapsedTime*100;
+	}
+
+	if (GetKey(olc::Z).bHeld)
+	{
+		_movementSpeed += fElapsedTime*100;
+	}
+
+	if (GetKey(olc::H).bHeld)
+	{
+		_movementSpeed -= fElapsedTime*100;
 	}
 }
 
@@ -58,15 +68,19 @@ bool Plane::OnUserUpdate(float fElapsedTime)
 	handleUserInput(fElapsedTime);
 
 	Clear(olc::BLACK);
-	//olc::PixelGameEngine::DrawRect(_screenBoundaryXmin, _screenBoundaryYmin, _screenBoundaryXmax - _screenBoundaryXmin, _screenBoundaryYmax - _screenBoundaryYmin, olc::GREY);
+/*	olc::PixelGameEngine::DrawRect(_screenBoundaryXmin, _screenBoundaryYmin, _screenBoundaryXmax - _screenBoundaryXmin, _screenBoundaryYmax - _screenBoundaryYmin, olc::GREY);
 
-	//double mx = GetMouseX();
-	//double my = GetMouseY();
-	//mx = stocx((int32_t)mx);
-	//my = stocy((int32_t)my);
-	//double middleX = stocx((_screenBoundaryXmax + _screenBoundaryXmin) / 2);
-	//double middleY = stocy((_screenBoundaryYmax + _screenBoundaryYmin) / 2);
-	//FillTriangle(middleX - 10, middleY + 10, middleX + 10, middleY - 10, mx, my, olc::YELLOW);
+	double mx = GetMouseX();
+	double my = GetMouseY();
+	mx=428;
+	my=34;
+	std::cout << mx << " " << my << std::endl;
+	mx = stocx((int32_t)mx);
+	my = stocy((int32_t)my);
+	double middleX = stocx((_screenBoundaryXmax + _screenBoundaryXmin) / 2);
+	double middleY = stocy((_screenBoundaryYmax + _screenBoundaryYmin) / 2);
+	FillTriangle(middleX - 10, middleY + 10, middleX + 10, middleY - 10, mx, my, olc::YELLOW);
+	*/
 
 	return true;
 }
@@ -529,13 +543,16 @@ inline void Plane::fillBottomFlatTriangle(Vec2d v1, Vec2d v2, Vec2d v3, olc::Pix
 
 	double curx1 = v1.x;
 	double curx2 = v1.x;
-	int32_t end = (int32_t)clampY(v2.y);
-	for (int scanlineY = (int32_t)v1.y; scanlineY <= end; scanlineY++)
+	int32_t end = (int)ceil(clampY(v2.y));
+	for (int scanlineY = (int)floor(v1.y); scanlineY <= end; scanlineY++)
 	{
-		DrawLineScreen((int)curx1, scanlineY, (int)curx2, scanlineY, p);
+		DrawLineScreen((int)round(curx1), scanlineY, (int)round(curx2), scanlineY, p/*olc::GREEN*/);
 		curx1 += invslope1;
 		curx2 += invslope2;
 	}
+	//olc::PixelGameEngine::Draw(v1.x,v1.y,olc::DARK_GREEN);
+	//olc::PixelGameEngine::Draw(v2.x,v2.y,olc::DARK_GREEN);
+	//olc::PixelGameEngine::Draw(v3.x,v3.y,olc::DARK_GREEN);
 }
 
 inline void Plane::fillTopFlatTriangle(Vec2d v1, Vec2d v2, Vec2d v3, olc::Pixel const& p)
@@ -545,30 +562,32 @@ inline void Plane::fillTopFlatTriangle(Vec2d v1, Vec2d v2, Vec2d v3, olc::Pixel 
 
 	double curx1 = v3.x;
 	double curx2 = v3.x;
-	int32_t end = (int32_t)clampY(v1.y);
-	for (int scanlineY = (int32_t)v3.y; scanlineY > end; scanlineY--)
+	int32_t end = (int)floor(clampY(v1.y));
+	for (int scanlineY = (int)ceil(v3.y); scanlineY >= end; scanlineY--)
 	{
-		DrawLineScreen((int)curx1, scanlineY, (int)curx2, scanlineY, p);
+		DrawLineScreen((int)round(curx1), scanlineY, (int)round(curx2), scanlineY, p/*olc::YELLOW*/);
 		curx1 -= invslope1;
 		curx2 -= invslope2;
 	}
+	//olc::PixelGameEngine::Draw(v1.x,v1.y,olc::DARK_YELLOW);
+	//olc::PixelGameEngine::Draw(v2.x,v2.y,olc::DARK_YELLOW);
+	//olc::PixelGameEngine::Draw(v3.x,v3.y,olc::DARK_YELLOW);
 }
 
 void Plane::FillTriangleHomebrew(double x1, double y1, double x2, double y2, double x3, double y3, olc::Pixel p)
 {
-	//TODO
-	Vec2d p1(ctosx(x1), ctosy(y1));
-	Vec2d p2(ctosx(x2), ctosy(y2));
-	Vec2d p3(ctosx(x3), ctosy(y3));
+	Vec2d p1(x1=ctosx(x1), y1=ctosy(y1));
+	Vec2d p2(x2=ctosx(x2), y2=ctosy(y2));
+	Vec2d p3(x3=ctosx(x3), y3=ctosy(y3));
 
-	std::vector<Vec2d> sortedY;
-	sortedY.push_back(p1);
-	sortedY.push_back(p2);
-	sortedY.push_back(p3);
-	std::sort(sortedY.begin(), sortedY.end(), [](const Vec2d& a, const Vec2d& b) { return a.y < b.y; });
-	p1 = sortedY[0];
-	p2 = sortedY[1];
-	p3 = sortedY[2];
+//	olc::PixelGameEngine::FillTriangle(x1,y1,x2,y2,x3,y3, olc::RED);
+
+	if(p1.y > p2.y)
+		std::swap(p1, p2);
+	if(p2.y > p3.y)
+		std::swap(p2, p3);
+	if(p1.y > p2.y)
+		std::swap(p1, p2);
 
 	// from: http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
 
@@ -589,10 +608,14 @@ void Plane::FillTriangleHomebrew(double x1, double y1, double x2, double y2, dou
 	else
 	{
 		/* general case - split the triangle in a topflat and bottom-flat one */
-		Vec2d p4((int)(p1.x + ((double)(p2.y - p1.y) / (double)(p3.y - p1.y)) * (p3.x - p1.x)), p2.y);
+		Vec2d p4((int)(p1.x + ((double)(p2.y - p1.y) / (double)(p3.y - p1.y)) * (p3.x - p1.x)), (int)p2.y);
 		fillBottomFlatTriangle(p1, p2, p4, p);
 		fillTopFlatTriangle(p2, p4, p3, p);
 	}
+
+	//olc::PixelGameEngine::Draw(x1,y1,olc::WHITE);
+	//olc::PixelGameEngine::Draw(x2,y2,olc::WHITE);
+	//olc::PixelGameEngine::Draw(x3,y3,olc::WHITE);
 }
 
 // Flat fills a triangle between points (x1,y1), (x2,y2) and (x3,y3)

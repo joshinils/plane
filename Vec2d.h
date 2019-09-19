@@ -1,6 +1,9 @@
 #ifndef VEC2D_H
 #define VEC2D_H
 
+#include <cmath>
+#include <iostream>
+
 class Vec2d
 {
 public:
@@ -28,12 +31,12 @@ public:
 	{
 		double cosTheta = (double)(operator* (other) / (this->length() * other.length()));
 
-		return acos(cosTheta);
+		return std::acos(cosTheta);
 	}
 
 	inline double length() const
 	{
-		return sqrt(x*x + y*y);
+		return std::sqrt(x*x + y*y);
 	}
 
 	// dot product

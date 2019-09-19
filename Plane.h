@@ -12,7 +12,7 @@ private:
 	double _originY = 0;
 	double _translX = 0;
 	double _translY = 0;
-	double _scale = 10;
+	double _scale = 5;
 
 	int _screenBoundaryXmin;
 	int _screenBoundaryXmax;
