@@ -85,50 +85,6 @@ bool Plane::OnUserUpdate(float fElapsedTime)
 	return true;
 }
 
-//coordinate to screen x
-inline int32_t Plane::ctosx(double x)
-{
-	return (int32_t)round((x + _translX - _originX) * _scale + _originX);
-}
-
-// screen to coordinate x
-inline double Plane::stocx(int32_t x)
-{
-	return (x - _originX) / _scale + _originX - _translX;
-}
-
-//coordinate to screen y
-inline int32_t Plane::ctosy(double y)
-{
-	return (int32_t)round((y + _translY - _originY) * _scale + _originY);
-}
-
-// screen to coordinate y
-inline double Plane::stocy(int32_t y)
-{
-	return (y - _originY) / _scale + _originY - _translY;
-}
-
-// clamps x to visible pixels
-inline double Plane::clampX(double x)
-{
-	if (x > _screenBoundaryXmax)
-		return _screenBoundaryXmax;
-	if (x < _screenBoundaryXmin - 1)
-		return _screenBoundaryXmin - 1;
-	return x;
-}
-
-// clamps y to visible pixels
-inline double Plane::clampY(double y)
-{
-	if (y > _screenBoundaryYmax)
-		return _screenBoundaryYmax;
-	if (y < _screenBoundaryYmin - 1)
-		return _screenBoundaryYmin - 1;
-	return y;
-}
-
 double Plane::minX()
 {
 	return stocx(0);//(-_originX) / _scale + _originX - _translX;
@@ -153,17 +109,6 @@ double Plane::maxY()
 bool Plane::Draw(double x, double y, olc::Pixel p)
 {
 	return olc::PixelGameEngine::Draw(ctosx(x), ctosy(y), p);
-}
-
-inline bool Plane::rol(int32_t const & x, int32_t const & y, olc::Pixel const & p, uint32_t & pattern)
-{
-	pattern = (pattern << 1) | (pattern >> 31);
-	if (pattern & 1)
-	{
-		olc::PixelGameEngine::Draw(x, y, p);
-		return true;
-	}
-	return false;
 }
 
 // Draws a line from (x1,y1) to (x2,y2)

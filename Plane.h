@@ -73,22 +73,54 @@ public:
 	virtual bool OnUserUpdate(float fElapsedTime);
 
 	//coordinate to screen x
-	inline int32_t ctosx(double x);
+    //coordinate to screen x
+    inline int32_t ctosx(double x)
+    {
+      return (int32_t)round((x + _translX - _originX) * _scale + _originX);
+    }
 
 	// screen to coordinate x
-	inline double stocx(int32_t x);
+    // screen to coordinate x
+    inline double stocx(int32_t x)
+    {
+      return (x - _originX) / _scale + _originX - _translX;
+    }
 
 	//coordinate to screen y
-	inline int32_t ctosy(double y);
+    //coordinate to screen y
+    inline int32_t ctosy(double y)
+    {
+      return (int32_t)round((y + _translY - _originY) * _scale + _originY);
+    }
 
 	// screen to coordinate y
-	inline double stocy(int32_t y);
+    // screen to coordinate y
+    inline double stocy(int32_t y)
+    {
+      return (y - _originY) / _scale + _originY - _translY;
+    }
 
 	// clamps x to visible pixels
-	inline double clampX(double x);
+    // clamps x to visible pixels
+    inline double clampX(double x)
+    {
+      if (x > _screenBoundaryXmax)
+        return _screenBoundaryXmax;
+      if (x < _screenBoundaryXmin - 1)
+        return _screenBoundaryXmin - 1;
+      return x;
+    }
 
 	// clamps y to visible pixels
-	inline double clampY(double y);
+    // clamps y to visible pixels
+    inline double clampY(double y)
+    {
+      if (y > _screenBoundaryYmax)
+        return _screenBoundaryYmax;
+      if (y < _screenBoundaryYmin - 1)
+        return _screenBoundaryYmin - 1;
+      return y;
+    }
 
 	double minX();
 	double minY();
@@ -99,7 +131,16 @@ public:
 	// Draws a single olc::Pixel
 	/*inline */bool Draw(double x, double y, olc::Pixel p = olc::WHITE);
 
-	inline bool rol(int32_t const& x, int32_t const& y, olc::Pixel const& p, uint32_t& pattern);;
+    inline bool rol(int32_t const& x, int32_t const& y, olc::Pixel const& p, uint32_t& pattern)
+    {
+      pattern = (pattern << 1) | (pattern >> 31);
+      if (pattern & 1)
+      {
+        olc::PixelGameEngine::Draw(x, y, p);
+        return true;
+      }
+      return false;
+    }
 
 	// Draws a line from (x1,y1) to (x2,y2)
 	inline void DrawLine(double x1, double y1, double x2, double y2, olc::Pixel p = olc::WHITE, uint32_t pattern = 0xFFFFFFFF);
