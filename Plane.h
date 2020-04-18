@@ -12,7 +12,7 @@ private:
 	double _originY = 0;
 	double _translX = 0;
 	double _translY = 0;
-	double _scale = 5;
+	double _scale = 1;
 
 	int _screenBoundaryXmin;
 	int _screenBoundaryXmax;
@@ -143,6 +143,7 @@ public:
     }
 
 	// Draws a line from (x1,y1) to (x2,y2)
+	inline void DrawLine(olc::vf2d start, olc::vf2d end, olc::Pixel p = olc::WHITE, uint32_t pattern = 0xFFFFFFFF) { DrawLine(start.x, start.y, end.x, end.y, p, pattern); }
 	inline void DrawLine(double x1, double y1, double x2, double y2, olc::Pixel p = olc::WHITE, uint32_t pattern = 0xFFFFFFFF);
 	inline void DrawLineScreen(int x1, int y1, int x2, int y2, olc::Pixel p, uint32_t pattern);
 	inline void DrawLineScreen(int x1, int y1, int x2, int y2, olc::Pixel p = olc::WHITE);
@@ -151,6 +152,8 @@ public:
 	void DrawCircle(double x, double y, double radius, olc::Pixel p = olc::WHITE, uint8_t mask = 0xFF);
 
 	// Fills a circle located at (x,y) with radius
+	void FillCircle(olc::vf2d center, double radius, olc::Pixel p = olc::WHITE)
+	{ FillCircle(center.x, center.y, radius, p); }
 	void FillCircle(double x, double y, double radius, olc::Pixel p = olc::WHITE);
 
 	// Draws a rectangle at (x,y) to (x+w,y+h)
@@ -163,6 +166,7 @@ public:
 	void DrawTriangle(double x1, double y1, double x2, double y2, double x3, double y3, olc::Pixel p = olc::WHITE);
 
 	// Flat fills a triangle between points (x1,y1), (x2,y2) and (x3,y3)
+	void FillTriangle(olc::vf2d p0, olc::vf2d p1, olc::vf2d p2, olc::Pixel p = olc::WHITE) { FillTriangle(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p); }
 	void FillTriangle(double x1, double y1, double x2, double y2, double x3, double y3, olc::Pixel p = olc::WHITE);
 	void FillTriangleHomebrew(double x1, double y1, double x2, double y2, double x3, double y3, olc::Pixel p = olc::WHITE);
 	void fillBottomFlatTriangle(Vec2d v1, Vec2d v2, Vec2d v3, olc::Pixel const& p);
@@ -181,3 +185,4 @@ public:
 };
 
 #endif // PLANE_H
+
