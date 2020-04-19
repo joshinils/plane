@@ -14,10 +14,10 @@ private:
 	double _translY = 0;
 	double _scale = 1;
 
-	int _screenBoundaryXmin;
-	int _screenBoundaryXmax;
-	int _screenBoundaryYmin;
-	int _screenBoundaryYmax;
+	int64_t _screenBoundaryXmin = 0;
+	int64_t _screenBoundaryXmax = INT64_MAX;
+	int64_t _screenBoundaryYmin = 0;
+	int64_t _screenBoundaryYmax = INT64_MAX;
 	double _movementSpeed = 100;
 
 private:
@@ -46,7 +46,7 @@ public:
 
 		_fontSprite = new olc::Sprite(128, 48);
 		int px = 0, py = 0;
-		for (int b = 0; b < 1024; b += 4)
+		for (size_t b = 0; b < 1024; b += 4)
 		{
 			uint32_t sym1 = (uint32_t)data[b + 0] - 48;
 			uint32_t sym2 = (uint32_t)data[b + 1] - 48;
@@ -105,9 +105,9 @@ public:
     inline double clampX(double x)
     {
       if (x > _screenBoundaryXmax)
-        return _screenBoundaryXmax;
+        return double(_screenBoundaryXmax);
       if (x < _screenBoundaryXmin - 1)
-        return _screenBoundaryXmin - 1;
+        return double(_screenBoundaryXmin - 1);
       return x;
     }
 
@@ -116,9 +116,9 @@ public:
     inline double clampY(double y)
     {
       if (y > _screenBoundaryYmax)
-        return _screenBoundaryYmax;
+        return double(_screenBoundaryYmax);
       if (y < _screenBoundaryYmin - 1)
-        return _screenBoundaryYmin - 1;
+        return double(_screenBoundaryYmin - 1);
       return y;
     }
 
@@ -185,4 +185,5 @@ public:
 };
 
 #endif // PLANE_H
+
 

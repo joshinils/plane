@@ -1,6 +1,6 @@
 #include "Plane.h"
 #include "Vec2d.h"
-//´#include<functional> // sort
+//#include<functional> // sort
 
 bool Plane::OnUserCreate()
 {
@@ -9,11 +9,11 @@ bool Plane::OnUserCreate()
 	_originY = olc::PixelGameEngine::ScreenHeight() / 2;
 	_translY = _originY;
 
-	int border = 00;
+	int64_t border = 0;
 	_screenBoundaryXmin = border;
-	_screenBoundaryXmax = olc::PixelGameEngine::GetDrawTargetWidth() - border;
+	_screenBoundaryXmax = (int64_t)olc::PixelGameEngine::GetDrawTargetWidth() - border;
 	_screenBoundaryYmin = border;
-	_screenBoundaryYmax = olc::PixelGameEngine::GetDrawTargetHeight() - border;
+	_screenBoundaryYmax = (int64_t)olc::PixelGameEngine::GetDrawTargetHeight() - border;
 
 	return true;
 }
@@ -605,14 +605,14 @@ void Plane::DrawString(double x, double y, std::string sText, olc::Pixel col, ui
 		}
 		else
 		{
-			int32_t ox = (c - 32) % 16;
-			int32_t oy = (c - 32) / 16;
+			int64_t ox = (c - 32) % 16;
+			int64_t oy = (c - 32) / 16;
 
 			if (scale > 1)
 			{
-				for (uint32_t i = 0; i < 8; i++)
-					for (uint32_t j = 0; j < 8; j++)
-						if (_fontSprite->GetPixel(i + ox * 8, j + oy * 8).r > 0)
+				for (uint64_t i = 0; i < 8; i++)
+					for (uint64_t j = 0; j < 8; j++)
+						if (_fontSprite->GetPixel(uint32_t(i + ox * 8), uint32_t(j + oy * 8)).r > 0)
 							for (uint32_t is = 0; is < scale; is++)
 								for (uint32_t js = 0; js < scale; js++)
 									 Draw(x + sx + (i*scale) + is, y + sy + (j*scale) + js, col); // todo scale correctly
@@ -621,7 +621,7 @@ void Plane::DrawString(double x, double y, std::string sText, olc::Pixel col, ui
 			{
 				for (uint32_t i = 0; i < 8; i++)
 					for (uint32_t j = 0; j < 8; j++)
-						if (_fontSprite->GetPixel(i + ox * 8, j + oy * 8).r > 0)
+						if (_fontSprite->GetPixel(uint32_t(i + ox * 8), uint32_t(j + oy * 8)).r > 0)
 							Draw(x + sx + i, y + sy + j, col);
 			}
 			sx += 8 * scale;
