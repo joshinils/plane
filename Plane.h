@@ -11,7 +11,7 @@ private:
     double _originY = 0;
     double _translX = 0;
     double _translY = 0;
-    double _scale   = 57.03;
+    double _scale   = 1;
 
     int64_t _screenBoundaryXmin = 0;
     int64_t _screenBoundaryXmax = INT64_MAX;
