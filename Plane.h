@@ -11,7 +11,7 @@ private:
     double _originY = 0;
     double _translX = 0;
     double _translY = 0;
-    double _scale   = 1;
+    double _scale   = .02;
 
     int64_t _screenBoundaryXmin = 0;
     int64_t _screenBoundaryXmax = INT64_MAX;
@@ -83,6 +83,8 @@ public:
 
     // screen to coordinate y
     inline double stocy(int32_t y) { return (y - _originY) / _scale + _originY - _translY; }
+
+    inline double getScale() { return _scale; }
 
     // clamps x to visible pixels
     inline double clampX(double x)
