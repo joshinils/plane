@@ -9,11 +9,26 @@ bool Plane::OnUserCreate()
     _originY = olc::PixelGameEngine::ScreenHeight() / 2;
     _translY = _originY;
 
+    _translX = -6500;
+    _translY = -36000;
+    _scale   = 0.5;
+
     int64_t border      = 0;
     _screenBoundaryXmin = border;
     _screenBoundaryXmax = (int64_t)olc::PixelGameEngine::GetDrawTargetWidth() - border;
     _screenBoundaryYmin = border;
     _screenBoundaryYmax = (int64_t)olc::PixelGameEngine::GetDrawTargetHeight() - border;
+
+    // set up one white pixel for decal drawing a single color
+    if(_gradientSprite == nullptr || _gradientDecal == nullptr)
+    {
+        delete _gradientDecal;
+        delete _gradientSprite;
+
+        _gradientSprite = new olc::Sprite(1, 1);
+        _gradientSprite->SetPixel({ 0, 0 }, olc::WHITE);
+        _gradientDecal = new olc::Decal(_gradientSprite);
+    }
 
     return true;
 }
@@ -530,16 +545,19 @@ void Plane::DrawString(double x, double y, std::string sText, olc::Pixel col, ui
 
             if(scale > 1)
             {
+                uint32_t is = 0;
+                uint32_t js = 0;
                 for(uint64_t i = 0; i < 8; i++)
                     for(uint64_t j = 0; j < 8; j++)
                         if(_fontSprite->GetPixel(uint32_t(i + ox * 8), uint32_t(j + oy * 8)).r > 0)
-                            for(uint32_t is = 0; is < scale; is++)
-                                for(uint32_t js = 0; js < scale; js++)
-                                    FillRect(x + sx + (i * scale) + is,
-                                             y + sy + (j * scale) + js,
-                                             1.01,
-                                             1.01,
-                                             col); // todo fill gaps
+                        {
+                            // todo fill gaps
+                            DrawDecal(ctos({ float(x + sx + (i * scale) + is), float(y + sy + (j * scale) + js) }),
+                                      _gradientDecal,
+                                      { (float)(scale * _scale), (float)(scale * _scale) },
+                                      col);
+                            //FillRect(x + sx + (i * scale) + is, y + sy + (j * scale) + js, scale, scale, col);
+                        }
             }
             else
             {

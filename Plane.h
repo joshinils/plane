@@ -11,13 +11,17 @@ private:
     double _originY = 0;
     double _translX = 0;
     double _translY = 0;
-    double _scale   = .02;
+    double _scale   = .1;
 
     int64_t _screenBoundaryXmin = 0;
     int64_t _screenBoundaryXmax = INT64_MAX;
     int64_t _screenBoundaryYmin = 0;
     int64_t _screenBoundaryYmax = INT64_MAX;
     double _movementSpeed       = 100;
+
+  protected:
+    olc::Sprite* _gradientSprite = nullptr;
+    olc::Decal* _gradientDecal = nullptr;
 
 private:
     olc::Sprite* _fontSprite;
@@ -66,7 +70,9 @@ public:
         }
     }
 
-    ~Plane() { delete _fontSprite; }
+    ~Plane() { delete _fontSprite;   delete _gradientDecal;
+    delete _gradientSprite;
+    }
 
     virtual bool OnUserCreate();
     void handleUserInput(double fElapsedTime);
@@ -74,9 +80,11 @@ public:
 
     //coordinate to screen x
     inline int32_t ctosx(double x) { return (int32_t)round((x + _translX - _originX) * _scale + _originX); }
+    inline olc::vf2d ctos(olc::vf2d v) { return {(float)ctosx(v.x), (float)ctosy(v.y)}; }
 
     // screen to coordinate x
     inline double stocx(int32_t x) { return (x - _originX) / _scale + _originX - _translX; }
+    inline olc::vf2d stoc(olc::vf2d v) { return {(float)stocx(v.x), (float)stocy(v.y)}; }
 
     //coordinate to screen y
     inline int32_t ctosy(double y) { return (int32_t)round((y + _translY - _originY) * _scale + _originY); }
