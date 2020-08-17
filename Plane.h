@@ -13,15 +13,22 @@ private:
     double _translY = 0;
     double _scale   = .1;
 
+protected:
+    double _totalElapsedTime = 0;
+
+private:
+    bool _flipX = false;
+    bool _flipY = false;
+
     int64_t _screenBoundaryXmin = 0;
     int64_t _screenBoundaryXmax = INT64_MAX;
     int64_t _screenBoundaryYmin = 0;
     int64_t _screenBoundaryYmax = INT64_MAX;
     double _movementSpeed       = 100;
 
-  protected:
+protected:
     olc::Sprite* _gradientSprite = nullptr;
-    olc::Decal* _gradientDecal = nullptr;
+    olc::Decal* _gradientDecal   = nullptr;
 
 private:
     olc::Sprite* _fontSprite;
@@ -70,24 +77,42 @@ public:
         }
     }
 
-    ~Plane() { delete _fontSprite;   delete _gradientDecal;
-    delete _gradientSprite;
+    ~Plane()
+    {
+        delete _fontSprite;
+        delete _gradientDecal;
+        delete _gradientSprite;
     }
 
     virtual bool OnUserCreate();
     void handleUserInput(double fElapsedTime);
     virtual bool OnUserUpdate(float fElapsedTime);
 
+protected:
+    inline double _ctosx(double x)
+    {
+        return _flipX ? ScreenWidth() - ((x + _translX - _originX) * _scale + _originX)
+                      : (x + _translX - _originX) * _scale + _originX;
+    }
+    inline double _ctosy(double y)
+    {
+        return _flipY ? ScreenHeight() - ((y + _translY - _originY) * _scale + _originY)
+                      : (y + _translY - _originY) * _scale + _originY;
+    }
+    inline double _stocx(int32_t x) { return (x - _originX) / _scale + _originX - _translX; }
+    inline double _stocy(int32_t y) { return (y - _originY) / _scale + _originY - _translY; }
+
+public:
     //coordinate to screen x
-    inline int32_t ctosx(double x) { return (int32_t)round((x + _translX - _originX) * _scale + _originX); }
-    inline olc::vf2d ctos(olc::vf2d v) { return {(float)ctosx(v.x), (float)ctosy(v.y)}; }
+    inline int32_t ctosx(double x) { return (int32_t)round(_ctosx(x)); }
+    inline olc::vf2d ctos(olc::vf2d v) { return { (float)round(ctosx(v.x)), (float)round(_ctosy(v.y)) }; }
 
     // screen to coordinate x
     inline double stocx(int32_t x) { return (x - _originX) / _scale + _originX - _translX; }
-    inline olc::vf2d stoc(olc::vf2d v) { return {(float)stocx(v.x), (float)stocy(v.y)}; }
+    inline olc::vf2d stoc(olc::vf2d v) { return { (float)stocx(v.x), (float)stocy(v.y) }; }
 
     //coordinate to screen y
-    inline int32_t ctosy(double y) { return (int32_t)round((y + _translY - _originY) * _scale + _originY); }
+    inline int32_t ctosy(double y) { return (int32_t)round(_ctosy(y)); }
 
     // screen to coordinate y
     inline double stocy(int32_t y) { return (y - _originY) / _scale + _originY - _translY; }
@@ -184,6 +209,9 @@ public:
 
     // Draws a single line of text
     void DrawString(double x, double y, std::string sText, olc::Pixel col = olc::WHITE, uint32_t scale = 1);
+    void DrawStringDecal(const olc::vf2d& pos, const std::string& sText, const olc::Pixel col, const olc::vf2d& scale);
+    void DrawStringDecalMinScale(
+    const olc::vf2d& pos, const std::string& sText, const olc::Pixel col, const olc::vf2d& scale, double minScale = 1);
 };
 
 #endif // PLANE_H

@@ -35,13 +35,14 @@ bool Plane::OnUserCreate()
 
 void Plane::handleUserInput(double fElapsedTime)
 {
-    if(GetKey(olc::W).bHeld) { _translY += fElapsedTime / _scale * _movementSpeed; }
-
-    if(GetKey(olc::S).bHeld) { _translY -= fElapsedTime / _scale * _movementSpeed; }
-
-    if(GetKey(olc::A).bHeld) { _translX += fElapsedTime / _scale * _movementSpeed; }
-
-    if(GetKey(olc::D).bHeld) { _translX -= fElapsedTime / _scale * _movementSpeed; }
+    if(GetKey(olc::W).bHeld)
+    { _translY += _flipY ? -fElapsedTime / _scale * _movementSpeed : fElapsedTime / _scale * _movementSpeed; }
+    if(GetKey(olc::S).bHeld)
+    { _translY -= _flipY ? -fElapsedTime / _scale * _movementSpeed : fElapsedTime / _scale * _movementSpeed; }
+    if(GetKey(olc::A).bHeld)
+    { _translX += _flipX ? -fElapsedTime / _scale * _movementSpeed : fElapsedTime / _scale * _movementSpeed; }
+    if(GetKey(olc::D).bHeld)
+    { _translX -= _flipX ? -fElapsedTime / _scale * _movementSpeed : fElapsedTime / _scale * _movementSpeed; }
 
     if(GetKey(olc::T).bHeld)
     {
@@ -56,12 +57,14 @@ void Plane::handleUserInput(double fElapsedTime)
     }
 
     if(GetKey(olc::Z).bHeld) { _movementSpeed += fElapsedTime * 100; }
-
     if(GetKey(olc::H).bHeld) { _movementSpeed -= fElapsedTime * 100; }
+    if(GetKey(olc::X).bPressed) { _flipX = !_flipX; }
+    if(GetKey(olc::Y).bPressed) { _flipY = !_flipY; }
 }
 
 bool Plane::OnUserUpdate(float fElapsedTime)
 {
+    this->_totalElapsedTime += fElapsedTime;
     handleUserInput(fElapsedTime);
 
     Clear(olc::BLACK);
@@ -569,4 +572,19 @@ void Plane::DrawString(double x, double y, std::string sText, olc::Pixel col, ui
             sx += 8 * scale;
         }
     }
+}
+
+void Plane::DrawStringDecal(const olc::vf2d& pos,
+                            const std::string& sText,
+                            const olc::Pixel col,
+                            const olc::vf2d& scale)
+{
+    olc::PixelGameEngine::DrawStringDecal(ctos(pos), sText, col, scale * _scale);
+}
+
+void Plane::DrawStringDecalMinScale(
+const olc::vf2d& pos, const std::string& sText, const olc::Pixel col, const olc::vf2d& scale, double minScale /* = 1 */)
+{
+    olc::vf2d s = { std::max(scale.x * _scale, minScale), std::max(scale.y * _scale, minScale) };
+    olc::PixelGameEngine::DrawStringDecal(ctos(pos), sText, col, s);
 }
