@@ -9,9 +9,9 @@ bool Plane::OnUserCreate()
     _originY = olc::PixelGameEngine::ScreenHeight() / 2;
     _translY = _originY;
 
-    _translX = -6500;
-    _translY = -36000;
-    _scale   = 0.5;
+    //_translX = 725;
+    //_translY = 90;
+    _scale = 10.5;
 
     int64_t border      = 0;
     _screenBoundaryXmin = border;
@@ -81,6 +81,10 @@ bool Plane::OnUserUpdate(float fElapsedTime)
         double middleY = stocy((_screenBoundaryYmax + _screenBoundaryYmin) / 2);
         FillTriangle(middleX - 10, middleY + 10, middleX + 10, middleY - 10, mx, my, olc::YELLOW);
         */
+
+    //std::cout << "_translX: " << _translX << '\n';
+    //std::cout << "_translY: " << _translY << '\n';
+
 
     return true;
 }
