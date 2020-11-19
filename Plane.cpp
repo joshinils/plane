@@ -589,6 +589,6 @@ void Plane::DrawStringDecal(const olc::vf2d& pos,
 void Plane::DrawStringDecalMinScale(
 const olc::vf2d& pos, const std::string& sText, const olc::Pixel col, const olc::vf2d& scale, double minScale /* = 1 */)
 {
-    olc::vf2d s = { std::max(scale.x * _scale, minScale), std::max(scale.y * _scale, minScale) };
+    olc::vf2d s = { (float)std::max(scale.x * _scale, minScale), (float)std::max(scale.y * _scale, minScale) };
     olc::PixelGameEngine::DrawStringDecal(ctos(pos), sText, col, s);
 }

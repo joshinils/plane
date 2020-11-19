@@ -4,6 +4,8 @@
 #include "Vec2d.h"
 #include "olcPixelGameEngine/olcPixelGameEngine.h"
 
+#undef None
+
 class Plane : public olc::PixelGameEngine
 {
 private:
