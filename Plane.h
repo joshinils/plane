@@ -109,19 +109,19 @@ public:
     inline int32_t ctosx(double x) { return (int32_t)round(_ctosx(x)); }
     inline olc::vf2d ctos(olc::vf2d v) { return { (float)round(ctosx(v.x)), (float)round(_ctosy(v.y)) }; }
 
-    // screen to coordinate x
+    /// screen to coordinate x
     inline double stocx(int32_t x) { return (x - _originX) / _scale + _originX - _translX; }
     inline olc::vf2d stoc(olc::vf2d v) { return { (float)stocx(v.x), (float)stocy(v.y) }; }
 
     //coordinate to screen y
     inline int32_t ctosy(double y) { return (int32_t)round(_ctosy(y)); }
 
-    // screen to coordinate y
+    /// screen to coordinate y
     inline double stocy(int32_t y) { return (y - _originY) / _scale + _originY - _translY; }
 
     inline double getScale() { return _scale; }
 
-    // clamps x to visible pixels
+    /// clamps x to visible pixels
     inline double clampX(double x)
     {
         if(x > _screenBoundaryXmax) return double(_screenBoundaryXmax);
@@ -129,7 +129,7 @@ public:
         return x;
     }
 
-    // clamps y to visible pixels
+    /// clamps y to visible pixels
     inline double clampY(double y)
     {
         if(y > _screenBoundaryYmax) return double(_screenBoundaryYmax);
@@ -143,7 +143,7 @@ public:
     double maxY();
 
 public:
-    // Draws a single olc::Pixel
+    /// Draws a single olc::Pixel
     /*inline */ bool Draw(double x, double y, olc::Pixel p = olc::WHITE);
 
     inline bool rol(int32_t const& x, int32_t const& y, olc::Pixel const& p, uint32_t& pattern)
@@ -157,12 +157,12 @@ public:
         return false;
     }
 
-    // Draws a line from (x1,y1) to (x2,y2)
+    /// Draws a line from (x1,y1) to (x2,y2)
     inline void DrawLine(olc::vf2d start, olc::vf2d end, olc::Pixel p = olc::WHITE, uint32_t pattern = 0xFFFFFFFF)
     {
         DrawLine(start.x, start.y, end.x, end.y, p, pattern);
     }
-    // Draws a line from (x1,y1) to (x2,y2)
+    /// Draws a line from (x1,y1) to (x2,y2)
     inline void
     DrawLine(double X1, double Y1, double X2, double Y2, olc::Pixel p = olc::WHITE, uint32_t pattern = 0xFFFFFFFF)
     {
@@ -171,26 +171,26 @@ public:
     void DrawLineScreen(int x1, int y1, int x2, int y2, olc::Pixel p, uint32_t pattern);
     void DrawLineScreen(int x1, int y1, int x2, int y2, olc::Pixel p = olc::WHITE);
 
-    // Draws a circle located at (x,y) with radius
+    /// Draws a circle located at (x,y) with radius
     void DrawCircle(double x, double y, double radius, olc::Pixel p = olc::WHITE, uint8_t mask = 0xFF);
 
-    // Fills a circle located at (x,y) with radius
+    /// Fills a circle located at (x,y) with radius
     void FillCircle(olc::vf2d center, double radius, olc::Pixel p = olc::WHITE)
     {
         FillCircle(center.x, center.y, radius, p);
     }
     void FillCircle(double x, double y, double radius, olc::Pixel p = olc::WHITE);
 
-    // Draws a rectangle at (x,y) to (x+w,y+h)
+    /// Draws a rectangle at (x,y) to (x+w,y+h)
     void DrawRect(double x, double y, double w, double h, olc::Pixel p = olc::WHITE);
 
-    // Fills a rectangle at (x,y) to (x+w,y+h)
+    /// Fills a rectangle at (x,y) to (x+w,y+h)
     void FillRect(double x, double y, double w, double h, olc::Pixel p = olc::WHITE);
 
-    // Draws a triangle between points (x1,y1), (x2,y2) and (x3,y3)
+    /// Draws a triangle between points (x1,y1), (x2,y2) and (x3,y3)
     void DrawTriangle(double x1, double y1, double x2, double y2, double x3, double y3, olc::Pixel p = olc::WHITE);
 
-    // Flat fills a triangle between points (x1,y1), (x2,y2) and (x3,y3)
+    /// Flat fills a triangle between points (x1,y1), (x2,y2) and (x3,y3)
     void FillTriangle(olc::vf2d p0, olc::vf2d p1, olc::vf2d p2, olc::Pixel p = olc::WHITE)
     {
         FillTriangle(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p);
@@ -201,19 +201,19 @@ public:
     void fillBottomFlatTriangle(Vec2d v1, Vec2d v2, Vec2d v3, olc::Pixel const& p);
     void fillTopFlatTriangle(Vec2d v1, Vec2d v2, Vec2d v3, olc::Pixel const& p);
 
-    // Draws an entire olc::Sprite at location (x,y)
+    /// Draws an entire olc::Sprite at location (x,y)
     void DrawSprite(double x, double y, olc::Sprite* sprite, uint32_t scale = 1);
 
-    // Draws an area of a olc::Sprite at location (x,y), where the
-    // selected area is (ox,oy) to (ox+w,oy+h)
+    /// Draws an area of a olc::Sprite at location (x,y), where the
+    /// selected area is (ox,oy) to (ox+w,oy+h)
     void DrawPartialSprite(
     double x, double y, olc::Sprite* sprite, double ox, double oy, double w, double h, uint32_t scale = 1);
 
-    // Draws a single line of text
+    /// Draws a single line of text
     void DrawString(double x, double y, std::string sText, olc::Pixel col = olc::WHITE, uint32_t scale = 1);
     void DrawStringDecal(const olc::vf2d& pos, const std::string& sText, const olc::Pixel col, const olc::vf2d& scale);
     void DrawStringDecalMinScale(
     const olc::vf2d& pos, const std::string& sText, const olc::Pixel col, const olc::vf2d& scale, double minScale = 1);
 };
 
-#endif // PLANE_H
+#endif /// PLANE_H

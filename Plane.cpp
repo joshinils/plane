@@ -1,6 +1,6 @@
 #include "Plane.h"
 #include "Vec2d.h"
-//#include<functional> // sort
+//#include<functional> /// sort
 
 bool Plane::OnUserCreate()
 {
@@ -19,7 +19,7 @@ bool Plane::OnUserCreate()
     _screenBoundaryYmin = border;
     _screenBoundaryYmax = (int64_t)olc::PixelGameEngine::GetDrawTargetHeight() - border;
 
-    // set up one white pixel for decal drawing a single color
+    /// set up one white pixel for decal drawing a single color
     if(_gradientSprite == nullptr || _gradientDecal == nullptr)
     {
         delete _gradientDecal;
@@ -113,10 +113,10 @@ double Plane::maxY()
     GetDrawTargetHeight()); //(olc::PixelGameEngine::GetDrawTargetHeight() - _originY) / _scale + _originY - _translY;
 }
 
-// Draws a single olc::Pixel
+/// Draws a single olc::Pixel
 bool Plane::Draw(double x, double y, olc::Pixel p) { return olc::PixelGameEngine::Draw(ctosx(x), ctosy(y), p); }
 
-// Draws a line from (x1,y1) to (x2,y2)
+/// Draws a line from (x1,y1) to (x2,y2)
 void Plane::DrawLineScreen(int x1, int y1, int x2, int y2, olc::Pixel p, uint32_t pattern)
 {
     //	return olc::PixelGameEngine::DrawLine(x1, y1, x2, y2, p, pattern);
@@ -132,30 +132,30 @@ void Plane::DrawLineScreen(int x1, int y1, int x2, int y2, olc::Pixel p, uint32_
     int dx = x2 - x1;
     int dy = y2 - y1;
 
-    // straight lines idea by gurkanctn
-    if(dx == 0) // Line is vertical
+    /// straight lines idea by gurkanctn
+    if(dx == 0) /// Line is vertical
     {
         if(y2 < y1) { std::swap(y1, y2); }
 
-        // dont draw where not visible
+        /// dont draw where not visible
         if(x1 != clampX(x1)) { return; }
 
         for(int y = (int32_t)clampY(y1); y <= (int32_t)clampY(y2); y++) { rol(x1, y, p, pattern); }
         return;
     }
 
-    if(dy == 0) // Line is horizontal
+    if(dy == 0) /// Line is horizontal
     {
         if(x2 < x1) { std::swap(x1, x2); }
 
-        // dont draw where not visible
+        /// dont draw where not visible
         if(y2 != clampY(y1)) { return; }
 
         for(int x = (int32_t)clampX(x1); x <= (int32_t)clampX(x2); x++) { rol(x, y1, p, pattern); }
         return;
     }
 
-    // Line is Funk-aye
+    /// Line is Funk-aye
     int dx1 = abs(dx);
     int dy1 = abs(dy);
     int px  = 2 * dy1 - dx1;
@@ -235,7 +235,7 @@ void Plane::DrawLineScreen(int x1, int y1, int x2, int y2, olc::Pixel p, uint32_
     }
 }
 
-// Draws a line from (x1,y1) to (x2,y2) without fiddling with patterns
+/// Draws a line from (x1,y1) to (x2,y2) without fiddling with patterns
 void Plane::DrawLineScreen(int x1, int y1, int x2, int y2, olc::Pixel p)
 {
     //	return olc::PixelGameEngine::DrawLine(x1, y1, x2, y2, p, pattern);
@@ -245,23 +245,23 @@ void Plane::DrawLineScreen(int x1, int y1, int x2, int y2, olc::Pixel p)
     int dx = x2 - x1;
     int dy = y2 - y1;
 
-    // straight lines idea by gurkanctn
-    if(dx == 0) // Line is vertical
+    /// straight lines idea by gurkanctn
+    if(dx == 0) /// Line is vertical
     {
         if(y2 < y1) { std::swap(y1, y2); }
 
-        // dont draw where not visible
+        /// dont draw where not visible
         if(x1 != clampX(x1)) { return; }
         int32_t end = (int32_t)clampY(y2);
         for(int y = (int32_t)clampY(y1); y <= end; y++) { olc::PixelGameEngine::Draw(x1, y, p); }
         return;
     }
 
-    if(dy == 0) // Line is horizontal
+    if(dy == 0) /// Line is horizontal
     {
         if(x2 < x1) { std::swap(x1, x2); }
 
-        // dont draw where not visible
+        /// dont draw where not visible
         if(y2 != clampY(y1)) { return; }
 
         int32_t end = (int32_t)clampX(x2);
@@ -269,7 +269,7 @@ void Plane::DrawLineScreen(int x1, int y1, int x2, int y2, olc::Pixel p)
         return;
     }
 
-    // Line is Funk-aye
+    /// Line is Funk-aye
     int dx1 = abs(dx);
     int dy1 = abs(dy);
     int px  = 2 * dy1 - dx1;
@@ -350,22 +350,22 @@ void Plane::DrawLineScreen(int x1, int y1, int x2, int y2, olc::Pixel p)
 }
 
 
-// Draws a circle located at (x,y) with radius
+/// Draws a circle located at (x,y) with radius
 void Plane::DrawCircle(double x, double y, double radius, olc::Pixel p, uint8_t mask)
 {
     return olc::PixelGameEngine::DrawCircle(ctosx(x), ctosy(y), int32_t(radius * _scale), p, mask);
 }
 
-// Fills a circle located at (x,y) with radius
+/// Fills a circle located at (x,y) with radius
 void Plane::FillCircle(double x, double y, double radius, olc::Pixel p)
 {
     x = ctosx(x);
     y = ctosy(y);
     radius *= _scale;
 
-    // Taken from wikipedia
+    /// Taken from wikipedia
     if(!radius) return;
-    // if not visible at all, i dont care at all
+    /// if not visible at all, i dont care at all
     if(x + radius < _screenBoundaryXmin) return;
     if(x - radius > _screenBoundaryXmax) return;
     if(y + radius < _screenBoundaryYmin) return;
@@ -376,8 +376,8 @@ void Plane::FillCircle(double x, double y, double radius, olc::Pixel p)
 
     while(y0 >= x0)
     {
-        // Modified to draw scan-lines instead of edges
-        // clamping is so that things outside of visible area are not drawn
+        /// Modified to draw scan-lines instead of edges
+        /// clamping is so that things outside of visible area are not drawn
         int ex = (int)clampX(x + x0);
         int ny = (int)clampY(y - y0);
         for(int i = (int32_t)clampX(x - x0); i <= ex; i++) olc::PixelGameEngine::Draw(i, ny, p);
@@ -397,20 +397,20 @@ void Plane::FillCircle(double x, double y, double radius, olc::Pixel p)
     }
 }
 
-// Draws a rectangle at (x,y) to (x+w,y+h)
+/// Draws a rectangle at (x,y) to (x+w,y+h)
 void Plane::DrawRect(double x, double y, double w, double h, olc::Pixel p)
 {
     return olc::PixelGameEngine::DrawRect(ctosx(x), ctosy(y), int32_t(w * _scale), int32_t(h * _scale), p);
 }
 
-// Fills a rectangle at (x,y) to (x+w,y+h)
+/// Fills a rectangle at (x,y) to (x+w,y+h)
 void Plane::FillRect(double x, double y, double w, double h, olc::Pixel p)
 {
     return olc::PixelGameEngine::FillRect(
     ctosx(x), ctosy(y), int32_t(std::max(ceil(w * _scale), 1.)), int32_t(std::max(ceil(h * _scale), 1.)), p);
 }
 
-// Draws a triangle between points (x1,y1), (x2,y2) and (x3,y3)
+/// Draws a triangle between points (x1,y1), (x2,y2) and (x3,y3)
 void Plane::DrawTriangle(double x1, double y1, double x2, double y2, double x3, double y3, olc::Pixel p)
 {
     //	olc::PixelGameEngine::DrawTriangle(ctosx(x1), ctosy(y1), ctosx(x2), ctosy(y2), ctosx(x3), ctosy(y3), olc::RED);
@@ -469,22 +469,22 @@ void Plane::FillTriangleHomebrew(double x1, double y1, double x2, double y2, dou
     if(p2.y > p3.y) std::swap(p2, p3);
     if(p1.y > p2.y) std::swap(p1, p2);
 
-    // from: http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
+    /// from: http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
 
-    /* at first sort the three vertices by y-coordinate ascending so v1 is the topmost vertice */
-    // sortVerticesAscendingByY();
+    /** at first sort the three vertices by y-coordinate ascending so v1 is the topmost vertice */
+    /// sortVerticesAscendingByY();
 
-    /* here we know that v1.y <= v2.y <= v3.y */
-    /* check for trivial case of bottom-flat triangle */
+    /** here we know that v1.y <= v2.y <= v3.y */
+    /** check for trivial case of bottom-flat triangle */
     if(p2.y == p3.y) { fillBottomFlatTriangle(p1, p2, p3, p); }
-    /* check for trivial case of top-flat triangle */
+    /** check for trivial case of top-flat triangle */
     else if(p1.y == p2.y)
     {
         fillTopFlatTriangle(p1, p2, p3, p);
     }
     else
     {
-        /* general case - split the triangle in a topflat and bottom-flat one */
+        /** general case - split the triangle in a topflat and bottom-flat one */
         Vec2d p4((int)(p1.x + ((double)(p2.y - p1.y) / (double)(p3.y - p1.y)) * (p3.x - p1.x)), (int)p2.y);
         fillBottomFlatTriangle(p1, p2, p4, p);
         fillTopFlatTriangle(p2, p4, p3, p);
@@ -495,7 +495,7 @@ void Plane::FillTriangleHomebrew(double x1, double y1, double x2, double y2, dou
     //olc::PixelGameEngine::Draw(x3,y3,olc::WHITE);
 }
 
-// Flat fills a triangle between points (x1,y1), (x2,y2) and (x3,y3)
+/// Flat fills a triangle between points (x1,y1), (x2,y2) and (x3,y3)
 void Plane::FillTriangle(double x1, double y1, double x2, double y2, double x3, double y3, olc::Pixel p)
 {
     //olc::PixelGameEngine::FillTriangle(ctosx(x1), ctosy(y1), ctosx(x2), ctosy(y2), ctosx(x3), ctosy(y3), olc::RED);
@@ -504,14 +504,14 @@ void Plane::FillTriangle(double x1, double y1, double x2, double y2, double x3, 
     FillTriangleHomebrew(x1, y1, x2, y2, x3, y3, p);
 }
 
-// Draws an entire olc::Sprite at location (x,y)
+/// Draws an entire olc::Sprite at location (x,y)
 void Plane::DrawSprite(double x, double y, olc::Sprite* sprite, uint32_t scale)
 {
     return olc::PixelGameEngine::DrawSprite(ctosx(x), ctosy(y), sprite, scale);
 }
 
-// Draws an area of a olc::Sprite at location (x,y), where the
-// selected area is (ox,oy) to (ox+w,oy+h)
+/// Draws an area of a olc::Sprite at location (x,y), where the
+/// selected area is (ox,oy) to (ox+w,oy+h)
 
 void Plane::DrawPartialSprite(
 double x, double y, olc::Sprite* sprite, double ox, double oy, double w, double h, uint32_t scale)
@@ -526,7 +526,7 @@ double x, double y, olc::Sprite* sprite, double ox, double oy, double w, double 
                                                    scale);
 }
 
-// Draws a single line of text
+/// Draws a single line of text
 void Plane::DrawString(double x, double y, std::string sText, olc::Pixel col, uint32_t scale)
 {
     //x = ctosx(x);
@@ -558,7 +558,7 @@ void Plane::DrawString(double x, double y, std::string sText, olc::Pixel col, ui
                     for(uint64_t j = 0; j < 8; j++)
                         if(_fontSprite->GetPixel(uint32_t(i + ox * 8), uint32_t(j + oy * 8)).r > 0)
                         {
-                            // todo fill gaps
+                            /// todo fill gaps
                             DrawDecal(ctos({ float(x + sx + (i * scale) + is), float(y + sy + (j * scale) + js) }),
                                       _gradientDecal,
                                       { (float)(scale * _scale), (float)(scale * _scale) },
@@ -587,7 +587,7 @@ void Plane::DrawStringDecal(const olc::vf2d& pos,
 }
 
 void Plane::DrawStringDecalMinScale(
-const olc::vf2d& pos, const std::string& sText, const olc::Pixel col, const olc::vf2d& scale, double minScale /* = 1 */)
+const olc::vf2d& pos, const std::string& sText, const olc::Pixel col, const olc::vf2d& scale, double minScale /** = 1 */)
 {
     olc::vf2d s = { (float)std::max(scale.x * _scale, minScale), (float)std::max(scale.y * _scale, minScale) };
     olc::PixelGameEngine::DrawStringDecal(ctos(pos), sText, col, s);

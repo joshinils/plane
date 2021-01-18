@@ -39,20 +39,20 @@ public:
 		return std::sqrt(x*x + y*y);
 	}
 
-	// dot product
+	/// dot product
 	inline double operator* (Vec2d const& v) const
 	{
 		return x * v.x + y * v.y;
 	}
 
-	// scaling
+	/// scaling
 	inline Vec2d operator* (double s) const
 	{
 		Vec2d res = *this;
 		return res *= s;
 	}
 
-	// other order of arguments, double first
+	/// other order of arguments, double first
 	friend inline Vec2d operator* (double s, Vec2d const& v)
 	{
 		return v * s;
@@ -119,4 +119,4 @@ public:
 	}
 };
 
-#endif // VEC2D_H
+#endif /// VEC2D_H
